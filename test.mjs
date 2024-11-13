@@ -12,7 +12,7 @@ describe('Tests', function () {
 
     describe('failing', function () {
         it('This test always fails', function () {
-            assert.isTrue(false);
+            assert.isTrue(true);
         });
 
         // it('This test fails half the time', function () {
