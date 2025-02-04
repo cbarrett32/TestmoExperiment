@@ -1,8 +1,9 @@
 # dev/docker-compose.yml
 version: '3'
 services:
-  node:
-    image: node:20
+  python:
+    image: python:3.10
     volumes:
       - ./../:/project
     working_dir: /project
+    command: sleep infinity  # Keeps the container running for interactive use

@@ -1,6 +1,7 @@
 # .github/workflows/test.yml
 name: Test
 
+# Can customize when the automation is run
 on: [push, workflow_dispatch]
 
 jobs:
@@ -10,20 +11,31 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: 20
-          cache: npm
-      - run: npm ci
+          python-version: 3.10
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests and generate JUnit report
+        run: pytest --junitxml=results/test-results.xml
+
+      - name: Install TestMo
       - run: npm install --no-save @testmo/testmo-cli
+
+      - name: Submit results to TestMo
       - run: |
           npx testmo automation:run:submit \
             --instance "$TESTMO_URL" \
             --project-id 1 \
-            --name "Mocha test run" \
+            --name "Python test run" \
             --source "unit-tests" \
             --results results/*.xml \
-            -- npm run mocha-junit # Note space after --
+            -- python -m unittest discover
         env:
           TESTMO_URL: ${{ secrets.TESTMO_URL }}
           TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
