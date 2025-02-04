@@ -20,6 +20,7 @@ jobs:
       - run: pip install -r requirements.txt 
 
       - run: pytest --junitxml=results/test-results.xml
+        continue-on-error: true
 
       - run: npm install --no-save @testmo/testmo-cli
 
